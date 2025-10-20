@@ -61,9 +61,22 @@
 
 <div class="max-w-7xl mx-auto px-4 py-8">
   {% if section.settings.heading != blank %}
-    <h2 class="text-3xl font-bold text-left text-gray-900 mb-8">
+    <h2 class="text-3xl font-['Source_Sans_Pro'] font-bold text-left text-gray-900 mb-8">
       {{ section.settings.heading }}
-    </h2>
+    </h2>  
+    {% if section.settings.show_view_all %}
+    <div class="text-center">
+      {% if section.settings.collection != blank %}
+        <a href="{{ section.settings.collection.url }}" class="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-md font-medium hover:bg-blue-600 hover:text-white transition-all duration-200 inline-block view-all-btn">
+          View All Products
+        </a>
+      {% elsif section.blocks.size > 0 %}
+        <a href="/collections" class="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-md font-medium hover:bg-blue-600 hover:text-white transition-all duration-200 inline-block view-all-btn">
+          View All Products
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
   {% endif %}
 
   <div class="relative">
