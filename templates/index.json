@@ -9,11 +9,7 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "disabled": true,
-      "settings": {}
-    },
+
     "custom_section_products_WK3Wt6": {
       "type": "custom-section-products",
       "name": "Custom Product Collection",
@@ -26,7 +22,6 @@
     }
   },
   "order": [
-    "main",
     "custom_section_products_WK3Wt6"
   ]
 }

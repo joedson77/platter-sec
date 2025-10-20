@@ -28,7 +28,21 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
-  
+    .head-custom .text-center a{
+        border: none;
+        color: #5C553A;
+        font-family: 'Inter';
+        font-weight: 900;
+        letter-spacing: 0.2px;
+    }
+    .head-custom .text-center{
+        display: flex!important;
+        
+    }
+    .head-custom {
+        justify-content: space-between!important;
+    }
+    
   @media (min-width: 1024px) {
     .products-slider {
       grid-template-columns: repeat(4, 1fr);
@@ -39,7 +53,13 @@
     width: auto !important;
   }
 }
-
+.head-custom {
+    display: flex;
+    justify-content: center;
+}
+.head-custom .text-center{
+    display: none;
+}
 .secondary-image {
   opacity: 0;
 }
