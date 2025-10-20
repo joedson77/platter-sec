@@ -4,6 +4,19 @@
   lang="{{ request.locale.iso_code }}"
 >
   <head>
+      <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#1E40AF',
+          }
+        }
+      }
+    }
+  </script>
     {%- if settings.favicon != blank -%}
       <link
         rel="icon"

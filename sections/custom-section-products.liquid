@@ -161,7 +161,12 @@
             <h3 class="product-title">
               <a href="{{ product.url }}">{{ product.title }}</a>
             </h3>
-            
+            <div class="flex items-center gap-0.5">
+              {% for i in (1..5) %}
+                  {% render 'icon-star', classes: 'star filled' %}
+              {% endfor %}
+                <span class="text-xs text-gray">1,234 reviews</span>
+            </div>
             <div class="product-price">
               {% if product.compare_at_price > product.price %}
                 <span class="sale-price">{{ product.price | money }}</span>
@@ -170,17 +175,12 @@
                 <span class="regular-price">{{ product.price | money }}</span>
               {% endif %}
             </div>
-            
-            {% if product.available %}
-              <span class="in-stock">In Stock</span>
-            {% else %}
-              <span class="out-of-stock">Out of Stock</span>
-            {% endif %}
           </div>
         </div>
       {% endfor %}
 
     {% else %}
+
       {% for i in (1..section.settings.products_to_show) %}
         <div class="product-card {% if forloop.index > 4 %}mobile-hidden{% endif %}">
           <div class="product-image-container">
@@ -193,7 +193,6 @@
             <div class="product-price">
               <span class="regular-price">${{ forloop.index | times: 19.99 }}</span>
             </div>
-            <span class="in-stock">In Stock</span>
           </div>
         </div>
       {% endfor %}
