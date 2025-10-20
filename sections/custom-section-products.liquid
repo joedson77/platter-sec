@@ -59,169 +59,356 @@
 }
 {% endschema %}
 
-<div class="product-collection-container">
+<div class="max-w-7xl mx-auto px-4 py-8">
   {% if section.settings.heading != blank %}
-    <h2 class="section-heading">{{ section.settings.heading }}</h2>
+    <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">
+      {{ section.settings.heading }}
+    </h2>
   {% endif %}
 
-  <div class="products-grid" id="products-grid-{{ section.id }}">
-    {% if section.blocks.size > 0 %}
-      {% for block in section.blocks limit: section.settings.products_to_show %}
-        {% assign product = block.settings.product %}
-        {% if product != blank %}
-          <div class="product-card {% if forloop.index > 4 %}mobile-hidden{% endif %}" {{ block.shopify_attributes }}>
-            <div class="product-image-container">
-              <a href="{{ product.url }}" class="product-image-link">
-                <img
-                  src="{{ product.featured_image | img_url: '500x500' }}"
-                  alt="{{ product.featured_image.alt | escape }}"
-                  class="product-image primary-image"
-                  loading="lazy"
-                >
-                {% if block.settings.secondary_image != blank %}
-                  <img
-                    src="{{ block.settings.secondary_image | img_url: '500x500' }}"
-                    alt="{{ product.title | escape }}"
-                    class="product-image secondary-image"
-                    loading="lazy"
-                  >
-                {% elsif product.images.size > 1 %}
-                  <img
-                    src="{{ product.images[1] | img_url: '500x500' }}"
-                    alt="{{ product.title | escape }}"
-                    class="product-image secondary-image"
-                    loading="lazy"
-                  >
-                {% else %}
+  <div class="relative">
+    <div class="products-grid-mobile grid grid-cols-2 gap-4 md:hidden" id="products-mobile-{{ section.id }}">
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks limit: section.settings.products_to_show %}
+          {% assign product = block.settings.product %}
+          {% if product != blank %}
+            <div class="product-card {% if forloop.index > 2 %}mobile-hidden{% endif %}">
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+                <div class="relative aspect-square overflow-hidden">
+                  <a href="{{ product.url }}" class="block w-full h-full">
+                    <img
+                      src="{{ product.featured_image | img_url: '500x500' }}"
+                      alt="{{ product.featured_image.alt | escape }}"
+                      class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 primary-image"
+                      loading="lazy"
+                    >
+                    {% if block.settings.secondary_image != blank %}
+                      <img
+                        src="{{ block.settings.secondary_image | img_url: '500x500' }}"
+                        alt="{{ product.title | escape }}"
+                        class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                        loading="lazy"
+                      >
+                    {% elsif product.images.size > 1 %}
+                      <img
+                        src="{{ product.images[1] | img_url: '500x500' }}"
+                        alt="{{ product.title | escape }}"
+                        class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                        loading="lazy"
+                      >
+                    {% else %}
+                      <img
+                        src="{{ product.featured_image | img_url: '500x500' }}"
+                        alt="{{ product.title | escape }}"
+                        class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                        loading="lazy"
+                      >
+                    {% endif %}
+                  </a>
+                </div>
+                
+                <div class="p-3">
+                  <h3 class="text-sm font-semibold text-gray-900 mb-1 line-clamp-2">
+                    <a href="{{ product.url }}" class="hover:text-blue-600 transition-colors">
+                      {{ product.title }}
+                    </a>
+                  </h3>
+                  
+                  <div class="flex items-center gap-0.5 mb-1">
+                    {% for i in (1..5) %}
+                      <svg class="w-2.5 h-2.5 {% if i <= 4 %}text-black{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
+                    {% endfor %}
+                    <span class="text-xs text-black ml-1">1,234</span>
+                  </div>
+                  
+                  <div class="flex items-center gap-1">
+                    {% if product.compare_at_price > product.price %}
+                      <span class="text-red-600 font-bold text-base">{{ product.price | money }}</span>
+                      <span class="text-gray-500 line-through text-xs">{{ product.compare_at_price | money }}</span>
+                    {% else %}
+                      <span class="text-gray-900 font-bold text-base">{{ product.price | money }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+      {% elsif section.settings.collection != blank %}
+        {% assign collection = section.settings.collection %}
+        {% for product in collection.products limit: section.settings.products_to_show %}
+          <div class="product-card {% if forloop.index > 2 %}mobile-hidden{% endif %}">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+              <div class="relative aspect-square overflow-hidden">
+                <a href="{{ product.url }}" class="block w-full h-full">
                   <img
                     src="{{ product.featured_image | img_url: '500x500' }}"
-                    alt="{{ product.title | escape }}"
-                    class="product-image secondary-image"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 primary-image"
                     loading="lazy"
                   >
-                {% endif %}
-              </a>
-            </div>
-            
-            <div class="product-info">
-              <h3 class="product-title">
-                <a href="{{ product.url }}">{{ product.title }}</a>
-              </h3>
-              
-              <div class="product-price">
-                {% if product.compare_at_price > product.price %}
-                  <span class="sale-price">{{ product.price | money }}</span>
-                  <span class="compare-price">{{ product.compare_at_price | money }}</span>
-                {% else %}
-                  <span class="regular-price">{{ product.price | money }}</span>
-                {% endif %}
+                  {% if product.images.size > 1 %}
+                    <img
+                      src="{{ product.images[1] | img_url: '500x500' }}"
+                      alt="{{ product.title | escape }}"
+                      class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <img
+                      src="{{ product.featured_image | img_url: '500x500' }}"
+                      alt="{{ product.title | escape }}"
+                      class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                      loading="lazy"
+                    >
+                  {% endif %}
+                </a>
               </div>
               
-              {% if product.available %}
-                <span class="in-stock">In Stock</span>
-              {% else %}
-                <span class="out-of-stock">Out of Stock</span>
-              {% endif %}
+              <div class="p-3">
+                <h3 class="text-sm font-semibold text-gray-900 mb-1 line-clamp-2">
+                  <a href="{{ product.url }}" class="hover:text-blue-600 transition-colors">
+                    {{ product.title }}
+                  </a>
+                </h3>
+                
+                <div class="flex items-center gap-0.5 mb-1">
+                  {% for i in (1..5) %}
+                    <svg class="w-2.5 h-2.5 {% if i <= 4 %}text-black{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                  {% endfor %}
+                  <span class="text-xs text-black ml-1">1,234</span>
+                </div>
+                
+                <div class="flex items-center gap-1">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="text-red-600 font-bold text-base">{{ product.price | money }}</span>
+                    <span class="text-gray-500 line-through text-xs">{{ product.compare_at_price | money }}</span>
+                  {% else %}
+                    <span class="text-gray-900 font-bold text-base">{{ product.price | money }}</span>
+                  {% endif %}
+                </div>
+              </div>
             </div>
           </div>
-        {% endif %}
-      {% endfor %}
+        {% endfor %}
 
-    {% elsif section.settings.collection != blank %}
-      {% assign collection = section.settings.collection %}
-      {% for product in collection.products limit: section.settings.products_to_show %}
-        <div class="product-card {% if forloop.index > 4 %}mobile-hidden{% endif %}">
-          <div class="product-image-container">
-            <a href="{{ product.url }}" class="product-image-link">
-              <img
-                src="{{ product.featured_image | img_url: '500x500' }}"
-                alt="{{ product.featured_image.alt | escape }}"
-                class="product-image primary-image"
-                loading="lazy"
-              >
-              {% if product.images.size > 1 %}
-                <img
-                  src="{{ product.images[1] | img_url: '500x500' }}"
-                  alt="{{ product.title | escape }}"
-                  class="product-image secondary-image"
-                  loading="lazy"
-                >
-              {% else %}
-                <img
-                  src="{{ product.featured_image | img_url: '500x500' }}"
-                  alt="{{ product.title | escape }}"
-                  class="product-image secondary-image"
-                  loading="lazy"
-                >
-              {% endif %}
-            </a>
-          </div>
-          
-          <div class="product-info">
-            <h3 class="product-title">
-              <a href="{{ product.url }}">{{ product.title }}</a>
-            </h3>
-            <div class="flex items-center gap-0.5">
-              {% for i in (1..5) %}
-                  {% render 'icon-star', classes: 'star filled' %}
-              {% endfor %}
-                <span class="text-xs text-gray">1,234 reviews</span>
-            </div>
-            <div class="product-price">
-              {% if product.compare_at_price > product.price %}
-                <span class="sale-price">{{ product.price | money }}</span>
-                <span class="compare-price">{{ product.compare_at_price | money }}</span>
-              {% else %}
-                <span class="regular-price">{{ product.price | money }}</span>
-              {% endif %}
+      {% else %}
+        {% for i in (1..section.settings.products_to_show) %}
+          <div class="product-card {% if forloop.index > 2 %}mobile-hidden{% endif %}">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+              <div class="relative aspect-square overflow-hidden">
+                <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                  {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'w-4/5 h-4/5 opacity-30' }}
+                </div>
+              </div>
+              <div class="p-3">
+                <h3 class="text-sm font-semibold text-gray-900 mb-1">Product {{ forloop.index }}</h3>
+                <div class="flex items-center gap-1">
+                  <span class="text-gray-900 font-bold text-base">${{ forloop.index | times: 19.99 }}</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      {% endfor %}
+        {% endfor %}
+      {% endif %}
+    </div>
 
-    {% else %}
+    <div class="products-slider mobile-hidden md:flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4" id="products-slider-{{ section.id }}">
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks limit: section.settings.products_to_show %}
+          {% assign product = block.settings.product %}
+          {% if product != blank %}
+            <div class="flex-shrink-0 w-80 snap-start" {{ block.shopify_attributes }}>
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+                <div class="relative aspect-square overflow-hidden">
+                  <a href="{{ product.url }}" class="block w-full h-full">
+                    <img
+                      src="{{ product.featured_image | img_url: '500x500' }}"
+                      alt="{{ product.featured_image.alt | escape }}"
+                      class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 primary-image"
+                      loading="lazy"
+                    >
+                    {% if block.settings.secondary_image != blank %}
+                      <img
+                        src="{{ block.settings.secondary_image | img_url: '500x500' }}"
+                        alt="{{ product.title | escape }}"
+                        class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                        loading="lazy"
+                      >
+                    {% elsif product.images.size > 1 %}
+                      <img
+                        src="{{ product.images[1] | img_url: '500x500' }}"
+                        alt="{{ product.title | escape }}"
+                        class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                        loading="lazy"
+                      >
+                    {% else %}
+                      <img
+                        src="{{ product.featured_image | img_url: '500x500' }}"
+                        alt="{{ product.title | escape }}"
+                        class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                        loading="lazy"
+                      >
+                    {% endif %}
+                  </a>
+                </div>
+                
+                <div class="p-4">
+                  <h3 class="text-base font-semibold text-gray-900 mb-2">
+                    <a href="{{ product.url }}" class="hover:text-blue-600 transition-colors">
+                      {{ product.title }}
+                    </a>
+                  </h3>
+                  
+                  <div class="flex items-center gap-0.5 mb-2">
+                    {% for i in (1..5) %}
+                      <svg class="w-3 h-3 {% if i <= 4 %}text-black{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
+                    {% endfor %}
+                    <span class="text-xs text-black ml-1">1,234 reviews</span>
+                  </div>
+                  
+                  <div class="flex items-center gap-2 mb-2">
+                    {% if product.compare_at_price > product.price %}
+                      <span class="text-red-600 font-bold text-lg">{{ product.price | money }}</span>
+                      <span class="text-gray-500 line-through text-sm">{{ product.compare_at_price | money }}</span>
+                    {% else %}
+                      <span class="text-gray-900 font-bold text-lg">{{ product.price | money }}</span>
+                    {% endif %}
+                  </div>
+                  
+                  {% if product.available %}
+                    <span class="text-green-600 text-sm font-medium">In Stock</span>
+                  {% else %}
+                    <span class="text-red-600 text-sm font-medium">Out of Stock</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
 
-      {% for i in (1..section.settings.products_to_show) %}
-        <div class="product-card {% if forloop.index > 4 %}mobile-hidden{% endif %}">
-          <div class="product-image-container">
-            <div class="product-image-placeholder">
-              {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'placeholder-svg' }}
+      {% elsif section.settings.collection != blank %}
+        {% assign collection = section.settings.collection %}
+        {% for product in collection.products limit: section.settings.products_to_show %}
+          <div class="flex-shrink-0 w-80 snap-start">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+              <div class="relative aspect-square overflow-hidden">
+                <a href="{{ product.url }}" class="block w-full h-full">
+                  <img
+                    src="{{ product.featured_image | img_url: '500x500' }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 primary-image"
+                    loading="lazy"
+                  >
+                  {% if product.images.size > 1 %}
+                    <img
+                      src="{{ product.images[1] | img_url: '500x500' }}"
+                      alt="{{ product.title | escape }}"
+                      class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <img
+                      src="{{ product.featured_image | img_url: '500x500' }}"
+                      alt="{{ product.title | escape }}"
+                      class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 secondary-image"
+                      loading="lazy"
+                    >
+                  {% endif %}
+                </a>
+              </div>
+              
+              <div class="p-4">
+                <h3 class="text-base font-semibold text-gray-900 mb-2">
+                  <a href="{{ product.url }}" class="hover:text-blue-600 transition-colors">
+                    {{ product.title }}
+                  </a>
+                </h3>
+                
+                <div class="flex items-center gap-0.5 mb-2">
+                  {% for i in (1..5) %}
+                    <svg class="w-3 h-3 {% if i <= 4 %}text-black{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                  {% endfor %}
+                  <span class="text-xs text-black ml-1">1,234 reviews</span>
+                </div>
+                
+                <div class="flex items-center gap-2 mb-2">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="text-red-600 font-bold text-lg">{{ product.price | money }}</span>
+                    <span class="text-gray-500 line-through text-sm">{{ product.compare_at_price | money }}</span>
+                  {% else %}
+                    <span class="text-gray-900 font-bold text-lg">{{ product.price | money }}</span>
+                  {% endif %}
+                </div>
+              </div>
             </div>
           </div>
-          <div class="product-info">
-            <h3 class="product-title">Product {{ forloop.index }}</h3>
-            <div class="product-price">
-              <span class="regular-price">${{ forloop.index | times: 19.99 }}</span>
+        {% endfor %}
+
+      {% else %}
+        {% for i in (1..section.settings.products_to_show) %}
+          <div class="flex-shrink-0 w-80 snap-start">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+              <div class="relative aspect-square overflow-hidden">
+                <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                  {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'w-4/5 h-4/5 opacity-30' }}
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="text-base font-semibold text-gray-900 mb-2">Product {{ forloop.index }}</h3>
+                <div class="flex items-center gap-2">
+                  <span class="text-gray-900 font-bold text-lg">${{ forloop.index | times: 19.99 }}</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      {% endfor %}
-    {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <button class="slider-prev absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hidden md:flex items-center justify-center w-10 h-10 z-10">
+      <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <button class="slider-next absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hidden md:flex items-center justify-center w-10 h-10 z-10">
+      <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
   </div>
 
-  <div class="show-more-container mobile-only">
+  <div class="text-center mb-8 md:hidden">
     <button 
       type="button" 
-      class="show-more-btn" 
+      class="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-all duration-200 flex items-center gap-2 mx-auto show-more-btn"
       id="show-more-{{ section.id }}"
-      aria-expanded="false"
     >
       <span class="show-more-text">Show More</span>
       <span class="show-less-text hidden">Show Less</span>
-      <svg class="btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
-        <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg class="w-4 h-4 transition-transform duration-300 btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
       </svg>
     </button>
   </div>
 
   {% if section.settings.show_view_all %}
-    <div class="view-all-container">
+    <div class="text-center">
       {% if section.settings.collection != blank %}
-        <a href="{{ section.settings.collection.url }}" class="view-all-btn">
+        <a href="{{ section.settings.collection.url }}" class="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-md font-medium hover:bg-blue-600 hover:text-white transition-all duration-200 inline-block view-all-btn">
           View All Products
         </a>
       {% elsif section.blocks.size > 0 %}
-        <a href="/collections" class="view-all-btn">
+        <a href="/collections" class="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-md font-medium hover:bg-blue-600 hover:text-white transition-all duration-200 inline-block view-all-btn">
           View All Products
         </a>
       {% endif %}
@@ -229,59 +416,144 @@
   {% endif %}
 </div>
 
-{% if section.settings.show_view_all %}
-  <div class="view-all-container">
-    {% if section.settings.collection != blank %}
-      <a href="{{ section.settings.collection.url }}" class="view-all-btn">
-        View All Products
-      </a>
-    {% elsif section.blocks.size > 0 %}
-      <a href="/collections" class="view-all-btn">
-        View All Products
-      </a>
-    {% endif %}
-  </div>
-{% endif %}
+<style>
+
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const sectionId = '{{ section.id }}';
+  const mobileGrid = document.getElementById(`products-mobile-${sectionId}`);
+  const desktopSlider = document.getElementById(`products-slider-${sectionId}`);
+  const prevBtn = document.querySelector('.slider-prev');
+  const nextBtn = document.querySelector('.slider-next');
   const showMoreBtn = document.getElementById(`show-more-${sectionId}`);
-  const productsGrid = document.getElementById(`products-grid-${sectionId}`);
   
-  if (showMoreBtn && productsGrid) {
-    showMoreBtn.addEventListener('click', function() {
-      const isExpanded = this.getAttribute('aria-expanded') === 'true';
-      const hiddenProducts = productsGrid.querySelectorAll('.mobile-hidden');
+  if (desktopSlider && prevBtn && nextBtn) {
+    const scrollAmount = 320;
+    
+    nextBtn.addEventListener('click', () => {
+      desktopSlider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+    
+    prevBtn.addEventListener('click', () => {
+      desktopSlider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+    
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let isDragging = false;
+    
+    const handleMouseDown = (e) => {
+      isDown = true;
+      desktopSlider.style.cursor = 'grabbing';
+      desktopSlider.style.userSelect = 'none';
+      startX = e.pageX - desktopSlider.offsetLeft;
+      scrollLeft = desktopSlider.scrollLeft;
+      isDragging = false;
       
-      if (isExpanded) {
-        hiddenProducts.forEach(product => {
-          product.style.maxHeight = '0';
-          product.style.opacity = '0';
-          product.style.marginBottom = '0';
-        });
-        setTimeout(() => {
-          hiddenProducts.forEach(product => product.classList.add('mobile-hidden'));
-        }, 300);
-      } else {
-        hiddenProducts.forEach(product => {
-          product.classList.remove('mobile-hidden');
-          setTimeout(() => {
-            product.style.maxHeight = product.scrollHeight + 'px';
-            product.style.opacity = '1';
-            product.style.marginBottom = '';
-          }, 10);
-        });
+      e.preventDefault();
+      return false;
+    };
+    
+    const handleMouseUp = (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        e.stopPropagation();
       }
       
-      this.setAttribute('aria-expanded', !isExpanded);
-      this.querySelector('.show-more-text').classList.toggle('hidden');
-      this.querySelector('.show-less-text').classList.toggle('hidden');
-      this.querySelector('.btn-arrow').style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)';
+      isDown = false;
+      desktopSlider.style.cursor = 'grab';
+      desktopSlider.style.userSelect = 'auto';
+      isDragging = false;
+    };
+    
+    const handleMouseMove = (e) => {
+      if (!isDown) return;
+      
+      isDragging = true;
+      e.preventDefault();
+      const x = e.pageX - desktopSlider.offsetLeft;
+      const walk = (x - startX) * 3;
+      desktopSlider.scrollLeft = scrollLeft - walk;
+    };
+    
+    const handleClick = (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    
+    desktopSlider.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    
+    const links = desktopSlider.querySelectorAll('a');
+    links.forEach(link => {
+      link.addEventListener('click', handleClick);
+      link.addEventListener('dragstart', (e) => e.preventDefault());
+    });
+    
+    const images = desktopSlider.querySelectorAll('img');
+    images.forEach(img => {
+      img.addEventListener('dragstart', (e) => e.preventDefault());
+      img.addEventListener('mousedown', (e) => e.preventDefault());
+    });
+    
+    desktopSlider.style.cursor = 'grab';
+    
+    let touchStartX;
+    let touchScrollLeft;
+    let isTouchDragging = false;
+    
+    desktopSlider.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].pageX;
+      touchScrollLeft = desktopSlider.scrollLeft;
+      isTouchDragging = false;
+    }, { passive: true });
+    
+    desktopSlider.addEventListener('touchmove', (e) => {
+      if (!touchStartX) return;
+      
+      const touchX = e.touches[0].pageX;
+      const walk = (touchX - touchStartX) * 2;
+      
+      if (Math.abs(walk) > 5) {
+        isTouchDragging = true;
+        desktopSlider.scrollLeft = touchScrollLeft - walk;
+      }
+    }, { passive: true });
+    
+    desktopSlider.addEventListener('touchend', (e) => {
+      if (isTouchDragging) {
+        e.preventDefault();
+      }
+      touchStartX = null;
+      isTouchDragging = false;
     });
   }
   
-  const productCards = document.querySelectorAll('.product-card');
+  if (showMoreBtn && mobileGrid) {
+    showMoreBtn.addEventListener('click', function() {
+      const isExpanded = mobileGrid.classList.contains('expanded');
+      
+      if (isExpanded) {
+        mobileGrid.classList.remove('expanded');
+        this.querySelector('.show-more-text').classList.remove('hidden');
+        this.querySelector('.show-less-text').classList.add('hidden');
+        this.querySelector('.btn-arrow').style.transform = 'rotate(0deg)';
+      } else {
+        mobileGrid.classList.add('expanded');
+        this.querySelector('.show-more-text').classList.add('hidden');
+        this.querySelector('.show-less-text').classList.remove('hidden');
+        this.querySelector('.btn-arrow').style.transform = 'rotate(180deg)';
+      }
+    });
+  }
+  
+  const productCards = document.querySelectorAll('.bg-white.rounded-lg');
   productCards.forEach(card => {
     const primaryImage = card.querySelector('.primary-image');
     const secondaryImage = card.querySelector('.secondary-image');
