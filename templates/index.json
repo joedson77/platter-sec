@@ -18,10 +18,10 @@
       "type": "custom-section-products",
       "name": "Custom Product Collection",
       "settings": {
-        "heading": "Featured Products",
+        "heading": "Best Sellers",
         "products_to_show": 10,
         "collection": "all",
-        "show_view_all": false
+        "show_view_all": true
       }
     }
   },
