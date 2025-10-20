@@ -61,7 +61,7 @@
 
 <div class="max-w-7xl mx-auto px-4 py-8">
   {% if section.settings.heading != blank %}
-    <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">
+    <h2 class="text-3xl font-bold text-left text-gray-900 mb-8">
       {{ section.settings.heading }}
     </h2>
   {% endif %}
@@ -140,7 +140,7 @@
       {% elsif section.settings.collection != blank %}
         {% assign collection = section.settings.collection %}
         {% for product in collection.products limit: section.settings.products_to_show %}
-          <div class="product-card {% if forloop.index > 2 %}mobile-hidden{% endif %}">
+          <div class="product-card {% if forloop.index > 4 %}mobile-hidden{% endif %}">
             <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
               <div class="relative aspect-square overflow-hidden">
                 <a href="{{ product.url }}" class="block w-full h-full">
@@ -390,12 +390,12 @@
   <div class="text-center mb-8 md:hidden">
     <button 
       type="button" 
-      class="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-all duration-200 flex items-center gap-2 mx-auto show-more-btn"
+      class="show-more-btn w-full max-w-xs mx-auto border border-gray-300 bg-white text-gray-900 px-6 py-4 rounded-lg font-medium hover:bg-gray-50 transition-all duration-200 flex items-center justify-center gap-2"
       id="show-more-{{ section.id }}"
     >
       <span class="show-more-text">Show More</span>
       <span class="show-less-text hidden">Show Less</span>
-      <svg class="w-4 h-4 transition-transform duration-300 btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-5 h-5 transition-transform duration-300 btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
       </svg>
     </button>
