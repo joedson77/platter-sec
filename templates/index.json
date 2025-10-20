@@ -13,9 +13,20 @@
       "type": "hello-world",
       "disabled": true,
       "settings": {}
+    },
+    "custom_section_products_WK3Wt6": {
+      "type": "custom-section-products",
+      "name": "Custom Product Collection",
+      "settings": {
+        "heading": "Featured Products",
+        "products_to_show": 10,
+        "collection": "all",
+        "show_view_all": false
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "custom_section_products_WK3Wt6"
   ]
 }
