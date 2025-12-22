@@ -18,6 +18,26 @@
       }
     }
   </script>
+  <script>
+  // Testar request.country_code do Shopify (server-side variable)
+  window.DEBUG_MARKET = {
+    request_country_code: '{{ request.country_code }}',
+    market_code: '{{ market_code }}',
+    market_name: '{{ market_name }}',
+    is_denmark: {{ is_denmark | json }},
+    is_international: {{ is_international | json }}
+  };
+  
+  console.log('%cDEBUG MARKET 🔍 [MARKET DETECTION]', 'color: #FF6B6B; font-weight: bold; font-size: 14px;');
+  console.log('%cDEBUG MARKET ━━━ VALORES DO REQUEST (SERVER-SIDE) ━━━', 'color: #FF6B6B; font-weight: bold;');
+  console.log('DEBUG MARKET request.country_code:', window.DEBUG_MARKET.request_country_code);
+  console.log('DEBUG MARKET market_code:', window.DEBUG_MARKET.market_code);
+  console.log('DEBUG MARKET market_name:', window.DEBUG_MARKET.market_name);
+  console.log('DEBUG MARKET is_denmark:', window.DEBUG_MARKET.is_denmark);
+  console.log('DEBUG MARKET is_international:', window.DEBUG_MARKET.is_international);
+  console.log('%cDEBUG MARKET ═══════════════════════════════════', 'color: #FF6B6B; font-weight: bold;');
+</script>
+
     {%- if settings.favicon != blank -%}
       <link
         rel="icon"
