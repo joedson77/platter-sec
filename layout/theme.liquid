@@ -1,4 +1,19 @@
 <!doctype html>
+  {%- liquid
+  assign request_locale = request.locale.iso_code | downcase
+  assign request_country = request.country_code | upcase
+  assign market_code = 'international'
+  assign market_name = 'International'
+  assign is_denmark = false
+  assign is_international = true
+  
+  if request_country == 'DK' or request_country == 'NL'
+    assign market_code = 'dk'
+    assign market_name = 'Denmark'
+    assign is_denmark = true
+    assign is_international = false
+  endif
+-%}
 <html
   class="no-js{% if request.design_mode %} shopify-design-mode{% endif %}"
   lang="{{ request.locale.iso_code }}"
